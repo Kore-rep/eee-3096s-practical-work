@@ -36,7 +36,7 @@ def welcome():
 
 # Print the game menu
 def menu():
-    global end_of_game
+    global end_of_game, CORRECT_VALUE
     option = input("Select an option:   H - View High Scores     P - Play Game       Q - Quit\n")
     option = option.upper()
     if option == "H":
@@ -83,6 +83,7 @@ def setup():
     # Buzzer
     GPIO.setup(buzzer, GPIO.OUT)
 
+    global pwm_led, pwm_buzzer
     # Setup PWM channels
     pwm_led = GPIO.PWM(LED_accuracy, 1000)
     pwm_led.start(0)
@@ -92,16 +93,16 @@ def setup():
     # Setup debouncing and callbacks
     GPIO.add_event_detect(btn_increase, GPIO.FALLING, callback=btn_increase_pressed, bouncetime=200)
     GPIO.add_event_detect(btn_submit, GPIO.FALLING, callback=btn_guess_pressed,bouncetime=200)
- 
+
 
 # Load high scores
 def fetch_scores():
     # get however many scores there are
     score_count = None
     # Get the scores
-    
+
     # convert the codes back to ascii
-    
+
     # return back the results
     return score_count, scores
 
@@ -123,6 +124,7 @@ def generate_number():
 
 # Increase button pressed
 def btn_increase_pressed(channel):
+    global USER_GUESS
     USER_GUESS += 1
     USER_GUESS = USER_GUESS % 8
     print(f"User Guess is {USER_GUESS}.")
@@ -163,12 +165,25 @@ def btn_guess_pressed(channel):
 
 def game_win():
     # Procedure for game win
+    pwm_led.stop()
+    pwm_buzzer.stop()
+    for i in range(3):
+        GPIO.output(LED_value[i], GPIO.LOW)
+    USER_GUESS = 0
+    print("Congratulations! You guessed correctly!!")
+
+    userName = input("Please enter your name:")
+
+
+
+    pass
 # LED Brightness
 def accuracy_leds():
     # Set the brightness of the LED based on how close the guess is to the answer
     # - The % brightness should be directly proportional to the % "closeness"
     # - For example if the answer is 6 and a user guesses 4, the brightness should be at 4/6*100 = 66%
     # - If they guessed 7, the brightness would be at ((8-7)/(8-6)*100 = 50%
+    pwm_led.ChangeDutyCycle(100.0-(abs(USER_GUESS-CORRECT_VALUE)/7*100.0))
     pass
 
 # Sound Buzzer
@@ -176,9 +191,16 @@ def trigger_buzzer():
     # The buzzer operates differently from the LED
     # While we want the brightness of the LED to change(duty cycle), we want the frequency of the buzzer to change
     # The buzzer duty cycle should be left at 50%
+    pwm_buzzer.ChangeDutyCycle(50.0);
     # If the user is off by an absolute value of 3, the buzzer should sound once every second
+    if (abs(USER_GUESS-CORRECT_VALUE) == 3):
+        pwm_buzzer.ChangeFrequency(1)
     # If the user is off by an absolute value of 2, the buzzer should sound twice every second
+    elif (abs(USER_GUESS-CORRECT_VALUE) == 2):
+        pwm_buzzer.ChangeFrequency(2)
     # If the user is off by an absolute value of 1, the buzzer should sound 4 times a second
+    elif (abs(USER_GUESS-CORRECT_VALUE) == 1):
+        pwm_buzzer.ChangeFrequency(4)
     pass
 
 
