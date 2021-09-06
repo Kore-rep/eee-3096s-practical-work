@@ -10,6 +10,7 @@ end_of_game = None  # set if the user wins or ends the game
 pwm_led = None
 pwm_buzzer = None
 USER_GUESS = 0
+CORRECT_VALUE = None
 
 # DEFINE THE PINS USED HERE
 LED_value = [11, 13, 15]
@@ -48,7 +49,7 @@ def menu():
         print("Starting a new round!")
         print("Use the buttons on the Pi to make and submit your guess!")
         print("Press and hold the guess button to cancel your game")
-        value = generate_number()
+        CORRECT_VALUE = generate_number()
         while not end_of_game:
             pass
     elif option == "Q":
@@ -122,8 +123,6 @@ def generate_number():
 
 # Increase button pressed
 def btn_increase_pressed(channel):
-    
-    global USER_GUESS
     USER_GUESS += 1
     USER_GUESS = USER_GUESS % 8
     print(f"User Guess is {USER_GUESS}.")
@@ -148,6 +147,10 @@ def btn_guess_pressed(channel):
     # If they've pressed and held the button, clear up the GPIO and take them back to the menu screen
     # Compare the actual value with the user value displayed on the LEDs
     # Change the PWM LED
+    if USER_GUESS == CORRECT_VALUE:
+        game_win()
+    accuracy_leds()
+    trigger_buzzer()
     # if it's close enough, adjust the buzzer
     # if it's an exact guess:
     # - Disable LEDs and Buzzer
@@ -158,7 +161,8 @@ def btn_guess_pressed(channel):
     # - Store the scores back to the EEPROM, being sure to update the score count
     pass
 
-
+def game_win():
+    # Procedure for game win
 # LED Brightness
 def accuracy_leds():
     # Set the brightness of the LED based on how close the guess is to the answer
