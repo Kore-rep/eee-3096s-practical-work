@@ -3,11 +3,13 @@ import RPi.GPIO as GPIO
 import random
 import ES2EEPROMUtils
 import os
+import time
 
 # some global variables that need to change as we run the program
 end_of_game = None  # set if the user wins or ends the game
 pwm_led = None
 pwm_buzzer = None
+USER_GUESS = 0
 
 # DEFINE THE PINS USED HERE
 LED_value = [11, 13, 15]
@@ -62,7 +64,6 @@ def display_scores(count, raw_data):
     # print out the scores in the required format
     pass
 
-
 # Setup Pins
 def setup():
     # Setup board mode
@@ -71,11 +72,16 @@ def setup():
     # Setup regular GPIO
     # LEDS
     for i in range(3):
+        print("LED: " ,LED_value[i])
         GPIO.setup(LED_value[i],GPIO.OUT)
+        GPIO.output(LED_value[i], GPIO.HIGH)
+
     GPIO.setup(LED_accuracy, GPIO.OUT)
+
     # Btns
     GPIO.setup(btn_submit, GPIO.IN, pull_up_down=GPIO.PUD_UP)
     GPIO.setup(btn_increase, GPIO.IN, pull_up_down=GPIO.PUD_UP)
+
     # Buzzer
     GPIO.setup(buzzer, GPIO.OUT)
 
@@ -88,8 +94,17 @@ def setup():
     # Setup debouncing and callbacks
     GPIO.add_event_detect(btn_increase, GPIO.FALLING, callback=btn_increase_pressed, bouncetime=200)
     GPIO.add_event_detect(btn_submit, GPIO.FALLING, callback=btn_guess_pressed,bouncetime=200)
-    pass
+    led_loop()
 
+def led_loop():
+    while True:
+        for i in range(3):
+            GPIO.output(LED_value[i], GPIO.HIGH)
+            time.sleep(1)
+            
+        for i in range(3):
+            GPIO.output(LED_value[i], GPIO.LOW)
+            time.sleep(1)       
 
 # Load high scores
 def fetch_scores():
@@ -120,11 +135,24 @@ def generate_number():
 
 # Increase button pressed
 def btn_increase_pressed(channel):
-    print("Increase Pressed")
+    
+    global USER_GUESS
+    USER_GUESS += 1
+    USER_GUESS = USER_GUESS % 8
+    print(f"User Guess is {USER_GUESS}.")
+    value_dict = {
+        0: [GPIO.LOW, GPIO.LOW, GPIO.LOW],
+        1: [GPIO.LOW, GPIO.LOW, GPIO.HIGH],
+        2: [GPIO.LOW, GPIO.HIGH, GPIO.LOW],
+        3: [GPIO.LOW, GPIO.HIGH, GPIO.HIGH],
+        4: [GPIO.HIGH, GPIO.LOW, GPIO.LOW],
+        5: [GPIO.HIGH, GPIO.LOW, GPIO.HIGH],
+        6: [GPIO.HIGH, GPIO.HIGH, GPIO.LOW],
+        7: [GPIO.HIGH, GPIO.HIGH, GPIO.HIGH],
+        }
     # Increase the value shown on the LEDs
-    # You can choose to have a global variable store the user's current guess, 
-    # or just pull the value off the LEDs when a user makes a guess
-    pass
+    for i in range(3):
+        GPIO.output(LED_value[i], value_dict[USER_GUESS][i])
 
 
 # Guess button
