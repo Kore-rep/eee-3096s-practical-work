@@ -72,10 +72,7 @@ def setup():
     # Setup regular GPIO
     # LEDS
     for i in range(3):
-        print("LED: " ,LED_value[i])
         GPIO.setup(LED_value[i],GPIO.OUT)
-        GPIO.output(LED_value[i], GPIO.HIGH)
-
     GPIO.setup(LED_accuracy, GPIO.OUT)
 
     # Btns
@@ -94,17 +91,7 @@ def setup():
     # Setup debouncing and callbacks
     GPIO.add_event_detect(btn_increase, GPIO.FALLING, callback=btn_increase_pressed, bouncetime=200)
     GPIO.add_event_detect(btn_submit, GPIO.FALLING, callback=btn_guess_pressed,bouncetime=200)
-    led_loop()
-
-def led_loop():
-    while True:
-        for i in range(3):
-            GPIO.output(LED_value[i], GPIO.HIGH)
-            time.sleep(1)
-            
-        for i in range(3):
-            GPIO.output(LED_value[i], GPIO.LOW)
-            time.sleep(1)       
+ 
 
 # Load high scores
 def fetch_scores():
