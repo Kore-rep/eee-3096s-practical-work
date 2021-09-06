@@ -86,8 +86,8 @@ def setup():
     pwm_buzzer.start(0)
 
     # Setup debouncing and callbacks
-    GPIO.add_event_detect(btn_increase, GPIO,BOTH, callback=btn_increase_pressed, bouncetime=200)
-    GPIO.add_event_detect(btn_submit, GPIO.BOTH, callback=btn_guess_pressed,bouncetime=200)
+    GPIO.add_event_detect(btn_increase, GPIO.FALLING, callback=btn_increase_pressed, bouncetime=200)
+    GPIO.add_event_detect(btn_submit, GPIO.FALLING, callback=btn_guess_pressed,bouncetime=200)
     pass
 
 
