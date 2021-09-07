@@ -55,7 +55,7 @@ def menu():
         print("Use the buttons on the Pi to make and submit your guess!")
         print("Press and hold the guess button to cancel your game")
         CORRECT_VALUE = generate_number()
-        print(f"Correct Value = {CORRECT_VALUE}")
+        #print(f"Correct Value = {CORRECT_VALUE}")
         while not end_of_game:
             pass
     elif option == "Q":
@@ -121,6 +121,7 @@ def trim_name(name):
 
 # Save high scores
 def save_scores():
+    score_count, scores = fetch_scores()
     user_name = input("Please enter your name:")
     if len(user_name) > 3:
         user_name = trim_name(user_name)
@@ -149,11 +150,10 @@ def generate_number():
 def btn_increase_pressed(channel):
     global USER_GUESS, last_interrupt_time
     start_time = time.time()
-    print(start_time - last_interrupt_time)
     if (start_time - last_interrupt_time > 0.2):
         USER_GUESS += 1
         USER_GUESS = USER_GUESS % 8
-        print(f"User Guess is {USER_GUESS}.")
+        #print(f"User Guess is {USER_GUESS}.")
         value_dict = {
             0: [GPIO.LOW, GPIO.LOW, GPIO.LOW],
             1: [GPIO.LOW, GPIO.LOW, GPIO.HIGH],
@@ -206,7 +206,6 @@ def btn_guess_pressed(channel):
         end_of_game = True
     else:
         if (start_time - last_interrupt_time > 0.2):
-            print("Short Press")
             if USER_GUESS == CORRECT_VALUE:
                 game_win()
             accuracy_leds()
@@ -215,12 +214,13 @@ def btn_guess_pressed(channel):
 
 def game_win():
     # Procedure for game win
+    global GUESS_ATTEMPTS
     pwm_led.stop()
     pwm_buzzer.stop()
     for i in range(3):
         GPIO.output(LED_value[i], GPIO.LOW)
     USER_GUESS = 0
-    print("Congratulations! You guessed correctly!!")
+    print(f"Congratulations! You guessed correctly!! It took you {GUESS_ATTEMPTS}!")
     save_scores()
 
 # LED Brightness
