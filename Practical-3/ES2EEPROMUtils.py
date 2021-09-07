@@ -36,8 +36,9 @@ class ES2EEPROM:
             if sleep_time:
                 sleep(sleep_time)
             start = i*bs+start_block
-            hb, lb = start >> 8, start & 0xff
-            data = [hb, lb]+block
+            #hb, lb = start >> 8, start & 0xff
+            #data = [hb, lb]+block
+            data = [start & 0xff] + block
             write = i2c_msg.write(self.address, data)
             self.bus.i2c_rdwr(write)
 
