@@ -68,6 +68,8 @@ def display_scores(count, raw_data):
     # print the scores to the screen in the expected format
     print("There are {} scores. Here are the top 3!".format(count))
     # print out the scores in the required format
+    for i in range(3):
+        print(i+1, ". ", raw_data[i][0], ": ", raw_data[i][1], sep="")
     pass
 
 # Setup Pins
@@ -104,13 +106,18 @@ def setup():
 # Load high scores
 def fetch_scores():
     global eeprom
-    # get however many scores there are
-    score_count = eeprom.read_byte(0)
-    print(score_count)
-    # Get the scores
-    scores = eeprom.read_block(0, score_count)
-    # convert the codes back to ascii
 
+    score_count = eeprom.read_byte(0)
+    scores = []
+    # Get the scores
+    for i in range(score_count):
+        scores.append(eeprom.read_block(i+1, 4))
+    # convert the codes back to ascii
+    for i in range(len(scores)):
+        name = chr(scores[i][0]) + chr(scores[i][1]) + chr(scores[i][2])
+        scores[i] = [name, scores[i][3]]
+
+    scores.sort(key=lambda x: x[1])
     # return back the results
     return score_count, scores
 
@@ -126,18 +133,24 @@ def save_scores():
     if len(user_name) > 3:
         user_name = trim_name(user_name)
     # fetch scores
-    #score_count , scores = fetch_scores()
+    # score_count , scores = fetch_scores()
     print("Reading Scores")
     # include new score
-    user_name_ord = ord
-    scores.append([user_name,GUESS_ATTEMPTS])
+    scores.append([user_name, GUESS_ATTEMPTS])
     # sort
     scores.sort(key=lambda x: x[1])
-    print(scores)
     # update total amount of scores
     score_count += 1
     # write new scores
-    #eeprom.write_block(scores)
+    eeprom.write_block(0, [score_count])
+
+    data_to_write = []
+
+    for letter in user_name:
+        data_to_write.append(ord(letter))
+    data_to_write.append(GUESS_ATTEMPTS)
+
+    eeprom.write_block(score_count, data_to_write)
     print("Writing Scores")
 
 
@@ -214,14 +227,15 @@ def btn_guess_pressed(channel):
 
 def game_win():
     # Procedure for game win
-    global GUESS_ATTEMPTS
+    global GUESS_ATTEMPTS, end_of_game
     pwm_led.stop()
     pwm_buzzer.stop()
     for i in range(3):
         GPIO.output(LED_value[i], GPIO.LOW)
     USER_GUESS = 0
-    print(f"Congratulations! You guessed correctly!! It took you {GUESS_ATTEMPTS}!")
+    print(f"Congratulations! You guessed correctly!! It took you {GUESS_ATTEMPTS}", "guesses!" if GUESS_ATTEMPTS > 1 else "guess!")
     save_scores()
+    end_of_game = True
 
 # LED Brightness
 def accuracy_leds():
@@ -249,6 +263,7 @@ def trigger_buzzer():
         pwm_buzzer.ChangeFrequency(4)
     else:
         pwm_buzzer.ChangeDutyCycle(0)
+
 
 if __name__ == "__main__":
     try:
