@@ -14,10 +14,11 @@ def print_sensor_vals(start_time, temp, ldr):
 def cycle_sample_time(channel):
     global current_sampling_time_index, sampling_times
     print(f"Changing from {sampling_times[current_sampling_time_index]}s to {sampling_times[(current_sampling_time_index+1)%3]}s after the next sample")
-    current_sampling_time_index += 1 % 3
+    current_sampling_time_index = (current_sampling_time_index +1) %3
 
 sampling_times = [10, 5, 1]
 current_sampling_time_index = 0
+
 #create the spi bus
 spi = busio.SPI(clock=board.SCK, MISO=board.MISO, MOSI=board.MOSI)
 
