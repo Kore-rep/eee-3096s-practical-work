@@ -36,8 +36,8 @@ start_time = time()
 ldr = AnalogIn(mcp, MCP.P2)
 temp = AnalogIn(mcp, MCP.P1)
 print("Runtime\tTemp Reading\tTemp\tLight Reading")
+x = threading.Thread(target=print_sensor_vals, args=(start_time, temp, ldr))
 while True:
-    x = threading.Thread(target=print_sensor_vals, args=(start_time, temp, ldr))
     x.start()
     x.join()
     wait_time = sampling_times[current_sampling_time_index]
