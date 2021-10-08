@@ -8,7 +8,7 @@ import adafruit_mcp3xxx.mcp3008 as MCP
 from adafruit_mcp3xxx.analog_in import AnalogIn
 
 def print_sensor_vals(start_time, temp, ldr):
-    print(f"{round(time()-start_time)}s\t{temp.value}\t \t{round(((temp.voltage-0.5)/0.01), 2)}\t{round(ldr.voltage, 2)}")
+    print(f"{round(time()-start_time)}s\t{temp.value}\t \t{round(((temp.voltage-0.5)/0.01), 2)}\t{round(ldr.value, 2)}")
 
 
 def cycle_sample_time(channel):
