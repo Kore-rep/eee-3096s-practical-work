@@ -32,11 +32,10 @@ module tb_reg_mem;
         #1;
         //Read 10-42 from addresses 0-31 
       	for(int i=10;i<42;i=i+1) 
-        begin
-            data_in = i; 
-          addr = (i-10);
-            $display("Read %d from address %d",data_in,addr);
-            repeat (2) #1 clk = ~clk;
+        begin 
+            addr = (i-10);
+          	repeat (2) #1 clk = ~clk;
+          	$display("Read %d from address %d",data_out,addr);
         end
 
 
