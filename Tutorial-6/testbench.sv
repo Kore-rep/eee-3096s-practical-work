@@ -17,23 +17,25 @@ module tb_reg_mem;
         $dumpfile("dump.vcd");
         $dumpvars(1, tb_reg_mem);
         
-        clk = 0;
+        clk = 1;
         wen = 1;
        
         //Write 10-42 to addresses 0-31 
       	for(int i=10;i<42;i=i+1) 
         begin
             data_in = i; 
-          	addr = (i-10);
+         	addr = (i-10);
             $display("Write %d to address %d",data_in,addr);
             repeat (2) #1 clk = ~clk;
+          	
         end
-        wen =0;
-        #1;
+      	clk = 0;
+      	#1;
+        wen = 0;
         //Read 10-42 from addresses 0-31 
-      	for(int i=10;i<42;i=i+1) 
+      	for(int i=0;i<32;i=i+1) 
         begin 
-            addr = (i-10);
+          	addr = i;
           	repeat (2) #1 clk = ~clk;
           	$display("Read %d from address %d",data_out,addr);
         end

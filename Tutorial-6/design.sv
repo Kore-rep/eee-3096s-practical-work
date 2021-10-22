@@ -9,9 +9,7 @@ module reg_mem (addr, data_in, wen, clk, data_out);
     input [DATA_WIDTH-1:0] data_in;
     input wen;
     input clk;
-    output [DATA_WIDTH-1:0] data_out;
-
-    reg [DATA_WIDTH-1:0] data_out;
+    output reg [DATA_WIDTH-1:0] data_out;
 
     //32 memory locations each storing a 8 bits wide value
     reg [DATA_WIDTH-1:0] mem_array [(2**ADDR_BITS)-1:0];
@@ -20,7 +18,6 @@ module reg_mem (addr, data_in, wen, clk, data_out);
 
         if (wen) begin //Write
             mem_array [addr] <= data_in;
-            data_out <= #(DATA_WIDTH)'b0;
         end
 
         else begin //Read
