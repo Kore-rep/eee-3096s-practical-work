@@ -17,7 +17,7 @@ def cycle_sample_time(channel):
     current_sampling_time_index = (current_sampling_time_index +1) %3
 
 sampling_times = [10, 5, 1]
-current_sampling_time_index = 0
+current_sampling_time_index = 2
 
 #create the spi bus
 spi = busio.SPI(clock=board.SCK, MISO=board.MISO, MOSI=board.MOSI)
@@ -36,8 +36,9 @@ start_time = time()
 ldr = AnalogIn(mcp, MCP.P2)
 temp = AnalogIn(mcp, MCP.P1)
 print("Runtime\tTemp Reading\tTemp\tLight Reading")
-x = threading.Thread(target=print_sensor_vals, args=(start_time, temp, ldr))
+
 while True:
+    x = threading.Thread(target=print_sensor_vals, args=(start_time, temp, ldr))
     x.start()
     x.join()
     wait_time = sampling_times[current_sampling_time_index]
