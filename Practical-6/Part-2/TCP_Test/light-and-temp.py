@@ -88,7 +88,7 @@ def sendStatus():
     global ENABLED, lastSampleTime, networkSocket
     print("Sending Status...")
     timestamp = lastSampleTime.strftime("%H:%M:%S")
-    dataStr = f"STATUS#{ENABLED}${timestamp}"
+    dataStr = f"STATUS#{timestamp}${ENABLED}"
     networkSocket.send(dataStr.encode())
 
 
