@@ -22,14 +22,15 @@ def serve_gui():
     elif 'status' in request.form:
         sendCommand("CHECK")
         print("Get Status")
-    elif 'checkLog' in request.form:
+    elif "checkLog" in request.form:
         print("Print Logs")
-    elif 'downLog' in request.form:
+    elif "downLog" in request.form:
         print("Download Logs")
     elif 'exit' in request.form:
         Exit;
         print("Exit")
-    return render_template('data_gui.html')
+    return render_template("data_gui.html")
+
 
 def setup():
     global TCP_IP, TCP_PORT, BUFFER_SIZE, sensorOn

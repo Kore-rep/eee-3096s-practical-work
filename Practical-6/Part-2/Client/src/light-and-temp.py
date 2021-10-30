@@ -7,6 +7,7 @@ import threading
 import time
 import RPi.GPIO as GPIO
 
+
 def setup():
     # create the spi bus
     spi = busio.SPI(clock=board.SCK, MISO=board.MISO, MOSI=board.MOSI)
@@ -22,25 +23,32 @@ def setup():
     light = AnalogIn(mcp, MCP.P2)
 
     global samplingTimes, currentSamplingTime
-    samplingTimes = [10, 5 , 1]
+    samplingTimes = [10, 5, 1]
     currentSamplingTime = 0
 
-    GPIO.setup(17, GPIO.IN, pull_up_down = GPIO.PUD_UP)
-    GPIO.add_event_detect(17, GPIO.FALLING, callback = changeSamplingTime, bouncetime = 200)
+    GPIO.setup(17, GPIO.IN, pull_up_down=GPIO.PUD_UP)
+    GPIO.add_event_detect(17, GPIO.FALLING, callback=changeSamplingTime, bouncetime=200)
+
 
 def changeSamplingTime(channel):
     global samplingTimes, currentSamplingTime
-    print(f"Sampling time will be changed from {samplingTimes[currentSamplingTime]}s to {samplingTimes[(currentSamplingTime + 1) % 3]}s after the next sample")
+    print(
+        f"Sampling time will be changed from {samplingTimes[currentSamplingTime]}s to {samplingTimes[(currentSamplingTime + 1) % 3]}s after the next sample"
+    )
     currentSamplingTime = (currentSamplingTime + 1) % 3
+
 
 def readValues():
     global temp, light, samplingTimes, currentSamplingTime
     while True:
         sleepTime = samplingTimes[currentSamplingTime]
-        print(f"{str(round(time.time()-startTime))}s\t{str(temp.value)}\t\t{str(round((temp.voltage-0.5)/0.01, 2))}°C\t{str(light.value)}")
+        print(
+            f"{str(round(time.time()-startTime))}s\t{str(temp.value)}\t\t{str(round((temp.voltage-0.5)/0.01, 2))}°C\t{str(light.value)}"
+        )
         time.sleep(sleepTime)
 
-if __name__ == '__main__':
+
+if __name__ == "__main__":
     setup()
     print("Runtime\tTemp Reading\tTemp\tLight Reading")
     global startTime
