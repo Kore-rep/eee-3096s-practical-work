@@ -13,7 +13,9 @@ def networkingSetup():
     print("Network setup...")
     TCP_IP = '127.0.0.1'
     TCP_PORT = 5005
-    global BUFFER_SIZE
+
+    global BUFFER_SIZE, ENABLED
+    ENABLED = True
     BUFFER_SIZE = 1024
     MESSAGE = "Hello, World!"
     global networkSocket
@@ -37,9 +39,10 @@ def setup():
     temp = AnalogIn(mcp, MCP.P1)
     light = AnalogIn(mcp, MCP.P2)
 
-    global samplingTimes, currentSamplingTime
+    global samplingTimes, currentSamplingTime, lastSampleTime
     samplingTimes = [10, 5 , 1]
     currentSamplingTime = 1
+    lastSampleTime = datetime.now()
 
     GPIO.setup(17, GPIO.IN, pull_up_down = GPIO.PUD_UP)
     GPIO.add_event_detect(17, GPIO.FALLING, callback = changeSamplingTime, bouncetime = 200)
@@ -51,19 +54,38 @@ def changeSamplingTime(channel):
     currentSamplingTime = (currentSamplingTime + 1) % 3
 
 def readValues():
-    global temp, light, samplingTimes, currentSamplingTime, networkSocket
-    while True:
+    global temp, light, samplingTimes, currentSamplingTime, networkSocket, ENABLED, lastSampleTime
+    while ENABLED:
         sleepTime = samplingTimes[currentSamplingTime]
         #print(f"{str(round(time.time()-startTime))}s\t{str(temp.value)}\t\t{str(round((temp.voltage-0.5)/0.01, 2))}°C\t{str(light.value)}")
         now = datetime.now()
         timestamp = now.strftime("%H:%M:%S")
-        temp_value = str(temp.value)
+        tempValue = str(temp.value)
         #temp_volts = str(round((temp.voltage-0.5)/0.01, 2))
-        light_val = str(light.value)
-        data_str = f"SENSORS#{timestamp}${temp_value}${light_val}"
-        print(data_str)
-        networkSocket.send(data_str.encode())
+        lightVal = str(light.value)
+        dataStr = f"SENSORS#{timestamp}${tempValue}${lightVal}"
+        print(dataStr)
+        networkSocket.send(dataStr.encode())
+        lastSampleTime = now
         time.sleep(sleepTime)
+
+def sendStatus():
+    global ENABLED, lastSampleTime, networkSocket
+    print("Sending Status...")
+    timestamp = lastSampleTime.strftime("%H:%M:%S")
+    dataStr = f"STATUS#{ENABLED}${timestamp}"
+    networkSocket.send(dataStr.encode())
+
+def disableSensors():
+    global ENABLED
+    ENABLED = False
+    sendStatus()
+
+def enableSensors():
+    global ENABLED
+    ENABLED = True
+    sendStatus()
+
 
 if __name__ == '__main__':
     setup()
@@ -75,5 +97,13 @@ if __name__ == '__main__':
     x.start()
     while 1:
         data = networkSocket.recv(BUFFER_SIZE)
-    print(data.decode())
+        serverMessage = data.decode()
+        #print(serverMessage)
+        if (serverMessage == "CHECK"):
+            sendStatus()
+        if (serverMessage == "SENDOFF"):
+            disableSensors()
+        if (serverMessage == "SENDON"):
+            enableSensors()
+
     x.join()
