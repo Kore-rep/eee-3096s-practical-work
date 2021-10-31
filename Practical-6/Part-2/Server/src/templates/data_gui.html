@@ -1,16 +1,24 @@
-<html>
-    <body>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="{{ url_for('static', filename='stylesheets/data_gui.css') }}" />
+    <title>Document</title>
+</head>
+<body>
 
-        <form method="post" action="/">
+    <form method="post" action="/">
 
-                <input type="submit" value="Turn Sensor On" name="sensOn"/>
-                <input type="submit" value="Turn Sensor Off" name="sensOff" />
-                <input type="submit" value="Status" name="status" />
-                <input type="submit" value="Check Log" name="checkLog" />
-                <input type="submit" value="Download Log" name="downLog" />
-                <input type="submit" value="Exit" name="exit" />
+            <input class="input sensOn" type="submit" value="Turn Sensor On" name="sensOn"/>
+            <input class="input sensOff" type="submit" value="Turn Sensor Off" name="sensOff" />
+            <input class="input status" type="submit" value="Status" name="status" />
+            <input class="input checkLog" type="submit" value="Check Log" name="checkLog" />
+            <input class="input downLog" type="submit" value="Download Log" name="downLog" />
+            <input class="input exit" type="submit" value="Exit" name="exit" />
 
-        </form>
-    </body>
+    </form>
+
+</body>
 </html>
-    

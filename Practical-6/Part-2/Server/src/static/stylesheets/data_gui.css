@@ -1,0 +1,11 @@
+.input{
+    font-size: 1rem;
+    background: rgb(180, 241, 255);
+    border: none;
+    padding: 1rem;
+    border-radius: 99999vw;
+}
+
+.input:hover, .input:focus{
+    background: rgb(58, 216, 252);
+}
