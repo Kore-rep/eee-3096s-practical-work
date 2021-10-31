@@ -8,17 +8,15 @@ app = Flask(__name__)
 
 @app.route('/', methods=['GET', 'POST'])
 def serve_gui():
-    global sensorOn, lastChecked, sensorReadings, logsDate
+    global sensorOn, lastChecked, sensorReadings, logsDate, clientConnected
     # print(request.method)
     if 'sensOn' in request.form:
         if (sensorOn == False):
             sendCommand("SENDON")
-            sensorOn = True;
             print("Turn Sensor On")
     elif 'sensOff' in request.form:
         if (sensorOn == True):
             sendCommand("SENDOFF")
-            sensorOn = False;
             print("Turn Sensor Off")
     elif 'status' in request.form:
         sendCommand("CHECK")
@@ -29,7 +27,7 @@ def serve_gui():
     elif 'exit' in request.form:
         print("Exit")
         exit()
-    return render_template("data_gui.html", sensorOn=sensorOn, lastChecked=lastChecked, last10Logs=sensorReadings, logsDate=logsDate)
+    return render_template("data_gui.html", sensorOn=sensorOn, lastChecked=lastChecked, last10Logs=sensorReadings, logsDate=logsDate, clientConnected=clientConnected)
 
 @app.route('/download')
 def downloadFile():
@@ -38,8 +36,9 @@ def downloadFile():
     return send_file(path, as_attachment=True)
 
 def setup():
-    global TCP_IP, TCP_PORT, BUFFER_SIZE, sensorOn, sensorReadings
-    sensorOn = True;
+    global TCP_IP, TCP_PORT, BUFFER_SIZE, sensorOn, sensorReadings, clientConnected
+    sensorOn = True
+    clientConnected = False
     sensorReadings=[""]
     # TCP_IP = '41.114.231.2'
     TCP_IP = '0.0.0.0'
@@ -53,38 +52,53 @@ def setup():
     s.listen(1)
 
 def sendCommand(command):
-    global conn, lastChecked, sensorOn
-    data = command.encode()
-    print(command)
-    conn.send(data)
-    data = conn.recv(BUFFER_SIZE)
-    checkData = data.decode()
-    if (checkData.split("#")[0] == "STATUS"):
-        lastChecked = checkData.split("#")[1].split("$")[0]
-        sensorOn = eval(checkData.split("#")[1].split("$")[1])
-    print(checkData)
+    try:
+        global conn, lastChecked, sensorOn, logsDate, clientConnected
+        data = command.encode()
+        print(command)
+        conn.send(data)
+        clientConnected = True
+        if (not sensorOn):
+            data = conn.recv(BUFFER_SIZE)
+            checkData = data.decode()
+            if (checkData.split("#")[0] == "STATUS"):
+                lastChecked = checkData.split("#")[1].split("$")[0]
+                sensorOn = eval(checkData.split("#")[1].split("$")[1])
+            print(checkData)
+    except:
+        logsDate = "Client not connected"
+        clientConnected = False
+        print("Can't send command")
 
 def runApp():
-    app.run(host='0.0.0.0', port=80)
-    # app.run()
+    try:
+        app.run(host='0.0.0.0', port=80)
+    except:
+        app.run()
 
 def runServer():
-    global conn, sensorOn
+    global conn, sensorOn, lastChecked, clientConnected
     conn, addr = s.accept()
 
-    while sensorOn:
-        data = conn.recv(BUFFER_SIZE)
-        if not data: break
-        checkSensor = data.decode().split("#")
-        if (checkSensor[0] == "SENSORS"):
-            currentDate = datetime.now().strftime("%d%m%y")
-            try:
-                logFile = open(f'{currentDate}.csv', 'a')
-                sensorReadings = checkSensor[1].split("$")
-                logFile.write(sensorReadings[0] + ',' + sensorReadings[1] + ',' + sensorReadings[2] + '\n')
-            finally:
-                logFile.close()
-    conn.close()
+    while 1:
+        if (sensorOn):
+            data = conn.recv(BUFFER_SIZE)
+            if not data: break
+            clientConnected = True
+            print(data.decode())
+            checkSensor = data.decode().split("#")
+            if (checkSensor[0] == "SENSORS"):
+                currentDate = datetime.now().strftime("%d%m%y")
+                try:
+                    logFile = open(f'{currentDate}.csv', 'a')
+                    sensorReadings = checkSensor[1].split("$")
+                    logFile.write(sensorReadings[0] + ',' + sensorReadings[1] + ',' + sensorReadings[2] + '\n')
+                finally:
+                    logFile.close()
+            if (checkSensor[0] == "STATUS"):
+                lastChecked = checkSensor[1].split("$")[0]
+                sensorOn = eval(checkSensor[1].split("$")[1])
+        conn.close()
 
 def checkLog():
     global sensorReadings, logsDate
@@ -97,7 +111,7 @@ def checkLog():
             sensorReadings = logFile.readlines()[-10:]
             for i in range(len(sensorReadings)):
                 tempReading = sensorReadings[i].split(",")
-                sensorReadings[i] = f"At {tempReading[0]} a temperature reading of {str(round((float(tempReading[1])-0.5)/0.01, 2))}°C and light reading of {tempReading[2]} was recorded"
+                sensorReadings[i] = f"At {tempReading[0]} a temperature reading of {tempReading[1]}°C and light reading of {tempReading[2]} was recorded"
             logsDate = 'Last 10 logs from ' + currentDate.strftime("%d %B %Y")
             logFile.close()
             fileFound = True
@@ -111,7 +125,7 @@ def checkLog():
 if __name__ == '__main__':
     setup()
     global lastChecked, logsDate
-    lastChecked = datetime.now().strftime("%H:%M:%S")
+    lastChecked = (datetime.now() + timedelta(hours=2)).strftime("%H:%M:%S")
     logsDate = ""
 
     appThread = threading.Thread(target=runApp)
@@ -119,6 +133,6 @@ if __name__ == '__main__':
 
     appThread.start()
     serverThread.start()
-
+    sendCommand("CHECK")
     appThread.join()
     serverThread.join()
