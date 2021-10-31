@@ -7,7 +7,7 @@ import threading
 import time
 import RPi.GPIO as GPIO
 import socket
-from datetime import datetime
+from datetime import datetime, timedelta
 
 
 def networkingSetup():
@@ -73,10 +73,10 @@ def readValues():
         # print(f"{str(round(time.time()-startTime))}s\t{str(temp.value)}\t\t{str(round((temp.voltage-0.5)/0.01, 2))}°C\t{str(light.value)}")
         now = datetime.now() + datetime.timedelta(hours=2)
         timestamp = now.strftime("%H:%M:%S")
-        tempValue = str(temp.value)
-        # temp_volts = str(round((temp.voltage-0.5)/0.01, 2))
+        #tempValue = str(temp.value)
+        tempVolts = str(round((temp.voltage-0.5)/0.01, 2))
         lightVal = str(light.value)
-        dataStr = f"SENSORS#{timestamp}${tempValue}${lightVal}"
+        dataStr = f"SENSORS#{timestamp}${tempVolts}${lightVal}"
         print(dataStr)
         networkSocket.send(dataStr.encode())
         lastSampleTime = now
