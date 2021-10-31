@@ -4,21 +4,50 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <link rel="stylesheet" href="{{ url_for('static', filename='stylesheets/data_gui.css') }}" />
-    <title>Document</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='stylesheets/data_gui_new.css') }}" />
+    <title>EEE Practical 6</title>
 </head>
 <body>
-
-    <form method="post" action="/">
-
-            <input class="input sensOn" type="submit" value="Turn Sensor On" name="sensOn"/>
-            <input class="input sensOff" type="submit" value="Turn Sensor Off" name="sensOff" />
+    <form class="formInput" method="post" action="/">
+            {% if sensorOn == False %}
+                <input class="input sensOn" type="submit" value="Turn Sensor On" name="sensOn"/>
+            {% else %}
+                <input class="input sensOff" type="submit" value="Turn Sensor Off" name="sensOff"/>
+            {% endif %}
             <input class="input status" type="submit" value="Status" name="status" />
             <input class="input checkLog" type="submit" value="Check Log" name="checkLog" />
-            <input class="input downLog" type="submit" value="Download Log" name="downLog" />
+            <a class="input downLog" href="{{url_for('.downloadFile')}}">Download Log</a>
             <input class="input exit" type="submit" value="Exit" name="exit" />
-
     </form>
-
+    <div class="mainContainer">
+        <h1>Last known status: {% if sensorOn == True %} Sampling {% else %} Not sampling {% endif %}<br>Checked at: {{lastChecked}} </h1>
+        <br>
+        <br>
+        <br>
+        <br>
+        <h2>{{logsDate}}</h2>
+        <br>
+        <br>
+        <p>{{last10Logs[0]}}</p>
+        <br>
+        <p>{{last10Logs[1]}}</p>
+        <br>
+        <p>{{last10Logs[2]}}</p>
+        <br>
+        <p>{{last10Logs[3]}}</p>
+        <br>
+        <p>{{last10Logs[4]}}</p>
+        <br>
+        <p>{{last10Logs[5]}}</p>
+        <br>
+        <p>{{last10Logs[6]}}</p>
+        <br>
+        <p>{{last10Logs[7]}}</p>
+        <br>
+        <p>{{last10Logs[8]}}</p>
+        <br>
+        <p>{{last10Logs[9]}}</p>
+        <br>
+    </div>
 </body>
 </html>
