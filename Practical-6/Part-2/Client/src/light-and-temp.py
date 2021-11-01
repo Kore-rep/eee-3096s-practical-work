@@ -16,13 +16,22 @@ def networkingSetup():
     TCP_IP = "102.39.247.225"
     TCP_PORT = 5005
 
-    global BUFFER_SIZE, ENABLED
+    global BUFFER_SIZE, ENABLED, networkSocket, timeout
     ENABLED = True
     BUFFER_SIZE = 1024
-    MESSAGE = "Hello, World!"
-    global networkSocket
     networkSocket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-    networkSocket.connect((TCP_IP, TCP_PORT))
+
+    connected = False
+    timeout = 10
+    timestamp = datetime.now + timedelta(hours=2)
+    timestamp = timestamp.strftime("%H:%M:%S")
+    while not connected:
+        try:
+            networkSocket.connect((TCP_IP, TCP_PORT))
+            connected = True
+        except OSError:
+            print(f"{timestamp}: Failed to connect to {TCP_IP} on Port {TCP_PORT}... Retrying in {timeout} seconds.")
+            time.sleep(timeout)
     print("Done.")
 
 
@@ -85,9 +94,8 @@ def readValues():
         time.sleep(sleepTime)
 
 def sendToSocket(unencodedData):
-    global networkSocket
+    global networkSocket, timeout
     sent = False
-    timeout = 10
     timestamp = datetime.now + timedelta(hours=2)
     timestamp = timestamp.strftime("%H:%M:%S")
     while not sent:
