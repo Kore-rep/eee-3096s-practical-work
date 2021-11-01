@@ -44,7 +44,7 @@ def setup():
 
     global samplingTimes, currentSamplingTime, lastSampleTime
     samplingTimes = [10, 5, 1]
-    currentSamplingTime = 1
+    currentSamplingTime = 0
     lastSampleTime = datetime.now()
 
     GPIO.setup(17, GPIO.IN, pull_up_down=GPIO.PUD_UP)
@@ -68,34 +68,50 @@ def changeSamplingTime(channel):
 def readValues():
     """Read the value from the temperature sensor and ldr, compile them into a data packet and send them to the server."""
     global temp, light, samplingTimes, currentSamplingTime, networkSocket, ENABLED, lastSampleTime
-    while ENABLED:
+    while 1:
+        if not ENABLED:
+            continue
         sleepTime = samplingTimes[currentSamplingTime]
         # print(f"{str(round(time.time()-startTime))}s\t{str(temp.value)}\t\t{str(round((temp.voltage-0.5)/0.01, 2))}°C\t{str(light.value)}")
-        now = datetime.now() + datetime.timedelta(hours=2)
+        now = datetime.now() + timedelta(hours=2)
         timestamp = now.strftime("%H:%M:%S")
         #tempValue = str(temp.value)
         tempVolts = str(round((temp.voltage-0.5)/0.01, 2))
         lightVal = str(light.value)
         dataStr = f"SENSORS#{timestamp}${tempVolts}${lightVal}"
         print(dataStr)
-        networkSocket.send(dataStr.encode())
+        sendToSocket(dataStr)        
         lastSampleTime = now
         time.sleep(sleepTime)
 
-
+def sendToSocket(unencodedData):
+    global networkSocket
+    sent = False
+    timeout = 10
+    timestamp = datetime.now + timedelta(hours=2)
+    timestamp = timestamp.strftime("%H:%M:%S")
+    while not sent:
+        try:
+            networkSocket.send(unencodedData.encode())
+            sent = True
+        except BrokenPipeError:
+            print(f"{timestamp}: Timed out...Retrying in {timeout} seconds")
+            time.sleep(timeout)
+        
 def sendStatus():
     """Compile a timestamp and the status of the client into a datapack and send to server."""
     global ENABLED, lastSampleTime, networkSocket
-    print("Sending Status...")
+    print("Sending Status")
     timestamp = lastSampleTime.strftime("%H:%M:%S")
     dataStr = f"STATUS#{timestamp}${ENABLED}"
-    networkSocket.send(dataStr.encode())
-
+    sendToSocket(dataStr)
+    print("Sent Status... " + dataStr)
 
 def disableSensors():
     """Disable the sensor reading and sending. Send new status to server."""
     global ENABLED
     ENABLED = False
+    print("Disabling...")
     sendStatus()
 
 
@@ -103,6 +119,7 @@ def enableSensors():
     """Enable sensor reading and sending. Send new status to server."""
     global ENABLED
     ENABLED = True
+    print("Enabling...")
     sendStatus()
 
 
@@ -130,6 +147,8 @@ if __name__ == "__main__":
                 disableSensors()
             elif serverMessage == "SENDON":
                 enableSensors()
+            elif serverMessage == "CYCLE":
+                changeSamplingTime()
     except KeyboardInterrupt:
         pass
     finally:
