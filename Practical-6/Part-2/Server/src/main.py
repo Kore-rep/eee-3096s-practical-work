@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, send_file
+from flask import Flask, render_template, request, send_file, redirect, url_for
 import socket
 import threading
 import os
@@ -31,9 +31,15 @@ def serve_gui():
 
 @app.route('/download')
 def downloadFile():
-    currentDate = datetime.now().strftime("%d%m%Y")
-    path = f'data/{currentDate}.csv'
-    return send_file(path, as_attachment=True)
+    global logsDate
+    try:
+        currentDate = datetime.now().strftime("%d%m%y")
+        path = f'{currentDate}.csv'
+        return send_file(path, as_attachment=True)
+    except FileNotFoundError:
+        print("File not found error")
+        logsDate = "Error 404: File Not Found"
+        return redirect(url_for('serve_gui'))
 
 def setup():
     global TCP_IP, TCP_PORT, BUFFER_SIZE, sensorOn, sensorReadings, clientConnected, logsDate
@@ -58,7 +64,7 @@ def sendCommand(command):
         data = command.encode()
         print(command)
         conn.send(data)
-        if (logsDate == "Client not connected"):
+        if ((logsDate == "Client not connected") or (logsDate == "Error 404: File Not Found")):
             logsDate = ""
         clientConnected = True
         if (not sensorOn):
@@ -80,14 +86,14 @@ def runApp():
         app.run()
 
 def runServer():
-    global conn, sensorOn, lastChecked, clientConnected
+    global conn, sensorOn, lastChecked, clientConnected, logsDate
     conn, addr = s.accept()
 
     while 1:
         if (sensorOn):
             data = conn.recv(BUFFER_SIZE)
             if not data: break
-            if (logsDate == "Client not connected"):
+            if ((logsDate == "Client not connected") or (logsDate == "Error 404: File Not Found")):
                 logsDate = ""
             clientConnected = True
             print(data.decode())
@@ -95,7 +101,7 @@ def runServer():
             if (checkSensor[0] == "SENSORS"):
                 currentDate = datetime.now().strftime("%d%m%y")
                 try:
-                    logFile = open(f'data/{currentDate}.csv', 'a')
+                    logFile = open(f'{currentDate}.csv', 'a')
                     sensorReadings = checkSensor[1].split("$")
                     logFile.write(sensorReadings[0] + ',' + sensorReadings[1] + ',' + sensorReadings[2] + '\n')
                 finally:
@@ -113,12 +119,12 @@ def checkLog():
     while ((dateOffset <= 5) and (fileFound == False)):
         currentDate = datetime.now() - timedelta(days=dateOffset)
         try:
-            logFile = open(f'data/{currentDate.strftime("%d%m%y")}.csv', 'r')
+            logFile = open(f'{currentDate.strftime("%d%m%y")}.csv', 'r')
             sensorReadings = logFile.readlines()[-10:]
             for i in range(len(sensorReadings)):
                 tempReading = sensorReadings[i].split(",")
                 sensorReadings[i] = f"At {tempReading[0]} a temperature reading of {tempReading[1]}°C and light reading of {tempReading[2]} was recorded"
-            logsDate = 'Last 10 logs from ' + currentDate.strftime("%d %B %Y")
+            logsDate = f'Last {len(sensorReadings)} logs from {currentDate.strftime("%d %B %Y")}'
             logFile.close()
             fileFound = True
         except:
