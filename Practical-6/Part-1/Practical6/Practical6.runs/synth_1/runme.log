@@ -1,0 +1,328 @@
+
+*** Running vivado
+    with args -log tb_simple_CPU.vds -m64 -product Vivado -mode batch -messageDb vivado.pb -notrace -source tb_simple_CPU.tcl
+
+
+
+****** Vivado v2021.2 (64-bit)
+  **** SW Build 3367213 on Tue Oct 19 02:48:09 MDT 2021
+  **** IP Build 3369179 on Thu Oct 21 08:25:16 MDT 2021
+    ** Copyright 1986-2021 Xilinx, Inc. All Rights Reserved.
+
+source tb_simple_CPU.tcl -notrace
+Command: read_checkpoint -auto_incremental -incremental D:/University/EEE3096S/eee-3096s-practical-work/Practical-6/Part-1/Practical6/Practical6.srcs/utils_1/imports/synth_1/tb_reg_mem.dcp
+INFO: [Vivado 12-5825] Read reference checkpoint from D:/University/EEE3096S/eee-3096s-practical-work/Practical-6/Part-1/Practical6/Practical6.srcs/utils_1/imports/synth_1/tb_reg_mem.dcp for incremental synthesis
+INFO: [Vivado 12-7989] Please ensure there are no constraint changes
+Command: synth_design -top tb_simple_CPU -part xc7k70tfbv676-1
+Starting synth_design
+Attempting to get a license for feature 'Synthesis' and/or device 'xc7k70t'
+INFO: [Common 17-349] Got license for feature 'Synthesis' and/or device 'xc7k70t'
+WARNING: [Designutils 20-4072] Reference run did not run incremental synthesis because the design is too small; reverting to default synthesis
+INFO: [Designutils 20-4379] Flow is switching to default flow due to incremental criteria not met. If you would like to alter this behaviour and have the flow terminate instead, please set the following parameter config_implementation {autoIncr.Synth.RejectBehavior Terminate}
+INFO: [Synth 8-7079] Multithreading enabled for synth_design using a maximum of 2 processes.
+INFO: [Synth 8-7078] Launching helper process for spawning children vivado processes
+INFO: [Synth 8-7075] Helper process launched with PID 18180
+---------------------------------------------------------------------------------
+Starting Synthesize : Time (s): cpu = 00:00:05 ; elapsed = 00:00:06 . Memory (MB): peak = 1253.797 ; gain = 0.000
+---------------------------------------------------------------------------------
+INFO: [Synth 8-6157] synthesizing module 'tb_simple_CPU' [D:/University/EEE3096S/eee-3096s-practical-work/Practical-6/Part-1/tb_simple_CPU.v:3]
+WARNING: [Synth 8-4446] all outputs are unconnected for this instance and logic may be removed [D:/University/EEE3096S/eee-3096s-practical-work/Practical-6/Part-1/tb_simple_CPU.v:13]
+INFO: [Synth 8-6157] synthesizing module 'simple_cpu' [D:/University/EEE3096S/eee-3096s-practical-work/Practical-6/Part-1/top.v:3]
+	Parameter DATA_WIDTH bound to: 8 - type: integer 
+	Parameter ADDR_BITS bound to: 5 - type: integer 
+	Parameter INSTR_WIDTH bound to: 20 - type: integer 
+INFO: [Synth 8-6157] synthesizing module 'alu' [D:/University/EEE3096S/eee-3096s-practical-work/Practical-6/Part-1/alu.v:1]
+	Parameter DATA_WIDTH bound to: 8 - type: integer 
+INFO: [Synth 8-6155] done synthesizing module 'alu' (1#1) [D:/University/EEE3096S/eee-3096s-practical-work/Practical-6/Part-1/alu.v:1]
+INFO: [Synth 8-6157] synthesizing module 'reg_mem' [D:/University/EEE3096S/eee-3096s-practical-work/Practical-6/Part-1/RegMem.v:3]
+	Parameter DATA_WIDTH bound to: 8 - type: integer 
+	Parameter ADDR_BITS bound to: 5 - type: integer 
+INFO: [Synth 8-6155] done synthesizing module 'reg_mem' (2#1) [D:/University/EEE3096S/eee-3096s-practical-work/Practical-6/Part-1/RegMem.v:3]
+WARNING: [Synth 8-689] width (8) of port connection 'addr' does not match port width (5) of module 'reg_mem' [D:/University/EEE3096S/eee-3096s-practical-work/Practical-6/Part-1/top.v:33]
+INFO: [Synth 8-6157] synthesizing module 'CU' [D:/University/EEE3096S/eee-3096s-practical-work/Practical-6/Part-1/CU.v:3]
+	Parameter DATA_WIDTH bound to: 8 - type: integer 
+	Parameter ADDR_BITS bound to: 5 - type: integer 
+	Parameter INSTR_WIDTH bound to: 20 - type: integer 
+WARNING: [Synth 8-6014] Unused sequential element instruction_reg was removed.  [D:/University/EEE3096S/eee-3096s-practical-work/Practical-6/Part-1/CU.v:35]
+INFO: [Synth 8-6155] done synthesizing module 'CU' (3#1) [D:/University/EEE3096S/eee-3096s-practical-work/Practical-6/Part-1/CU.v:3]
+INFO: [Synth 8-6155] done synthesizing module 'simple_cpu' (4#1) [D:/University/EEE3096S/eee-3096s-practical-work/Practical-6/Part-1/top.v:3]
+INFO: [Synth 8-6155] done synthesizing module 'tb_simple_CPU' (5#1) [D:/University/EEE3096S/eee-3096s-practical-work/Practical-6/Part-1/tb_simple_CPU.v:3]
+WARNING: [Synth 8-7129] Port rst in module CU is either unconnected or has no load
+---------------------------------------------------------------------------------
+Finished Synthesize : Time (s): cpu = 00:00:06 ; elapsed = 00:00:07 . Memory (MB): peak = 1253.797 ; gain = 0.000
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Finished Constraint Validation : Time (s): cpu = 00:00:07 ; elapsed = 00:00:07 . Memory (MB): peak = 1253.797 ; gain = 0.000
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Start Loading Part and Timing Information
+---------------------------------------------------------------------------------
+Loading part: xc7k70tfbv676-1
+---------------------------------------------------------------------------------
+Finished Loading Part and Timing Information : Time (s): cpu = 00:00:07 ; elapsed = 00:00:07 . Memory (MB): peak = 1253.797 ; gain = 0.000
+---------------------------------------------------------------------------------
+INFO: [Device 21-403] Loading part xc7k70tfbv676-1
+INFO: [Synth 8-802] inferred FSM for state register 'state_reg' in module 'CU'
+---------------------------------------------------------------------------------------------------
+                   State |                     New Encoding |                Previous Encoding 
+---------------------------------------------------------------------------------------------------
+                   RESET |                              000 |                             0000
+                  DECODE |                              001 |                             0001
+                 EXECUTE |                              010 |                             0010
+              MEM_ACCESS |                              011 |                             0100
+              WRITE_BACK |                              100 |                             1000
+---------------------------------------------------------------------------------------------------
+INFO: [Synth 8-3354] encoded FSM with state register 'state_reg' using encoding 'sequential' in module 'CU'
+---------------------------------------------------------------------------------
+Finished RTL Optimization Phase 2 : Time (s): cpu = 00:00:07 ; elapsed = 00:00:08 . Memory (MB): peak = 1253.797 ; gain = 0.000
+---------------------------------------------------------------------------------
+No constraint files found.
+---------------------------------------------------------------------------------
+Start RTL Component Statistics 
+---------------------------------------------------------------------------------
+Detailed RTL Component Info : 
++---Adders : 
+	   3 Input    8 Bit       Adders := 1     
+	   2 Input    8 Bit       Adders := 1     
++---Registers : 
+	                8 Bit    Registers := 9     
+	                4 Bit    Registers := 1     
+	                1 Bit    Registers := 3     
++---RAMs : 
+	              256 Bit	(32 X 8 bit)          RAMs := 1     
++---Muxes : 
+	   2 Input    8 Bit        Muxes := 5     
+	   4 Input    8 Bit        Muxes := 3     
+	   5 Input    8 Bit        Muxes := 1     
+	   5 Input    3 Bit        Muxes := 1     
+	   2 Input    3 Bit        Muxes := 2     
+	   3 Input    3 Bit        Muxes := 1     
+	   2 Input    1 Bit        Muxes := 24    
+	   5 Input    1 Bit        Muxes := 13    
+	   3 Input    1 Bit        Muxes := 2     
+---------------------------------------------------------------------------------
+Finished RTL Component Statistics 
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Start Part Resource Summary
+---------------------------------------------------------------------------------
+Part Resources:
+DSPs: 240 (col length:80)
+BRAMs: 270 (col length: RAMB18 80 RAMB36 40)
+---------------------------------------------------------------------------------
+Finished Part Resource Summary
+---------------------------------------------------------------------------------
+No constraint files found.
+---------------------------------------------------------------------------------
+Start Cross Boundary and Area Optimization
+---------------------------------------------------------------------------------
+WARNING: [Synth 8-7080] Parallel synthesis criteria is not met
+WARNING: [Synth 8-3332] Sequential element (SCPU_DUT/CU1/FSM_sequential_state_reg[2]) is unused and will be removed from module tb_simple_CPU.
+WARNING: [Synth 8-3332] Sequential element (SCPU_DUT/CU1/FSM_sequential_state_reg[1]) is unused and will be removed from module tb_simple_CPU.
+WARNING: [Synth 8-3332] Sequential element (SCPU_DUT/CU1/FSM_sequential_state_reg[0]) is unused and will be removed from module tb_simple_CPU.
+WARNING: [Synth 8-3332] Sequential element (SCPU_DUT/data_memory/mem_array_reg[0][7]) is unused and will be removed from module tb_simple_CPU.
+WARNING: [Synth 8-3332] Sequential element (SCPU_DUT/data_memory/mem_array_reg[0][6]) is unused and will be removed from module tb_simple_CPU.
+WARNING: [Synth 8-3332] Sequential element (SCPU_DUT/data_memory/mem_array_reg[0][5]) is unused and will be removed from module tb_simple_CPU.
+WARNING: [Synth 8-3332] Sequential element (SCPU_DUT/data_memory/mem_array_reg[0][4]) is unused and will be removed from module tb_simple_CPU.
+WARNING: [Synth 8-3332] Sequential element (SCPU_DUT/data_memory/mem_array_reg[0][3]) is unused and will be removed from module tb_simple_CPU.
+WARNING: [Synth 8-3332] Sequential element (SCPU_DUT/data_memory/mem_array_reg[0][2]) is unused and will be removed from module tb_simple_CPU.
+WARNING: [Synth 8-3332] Sequential element (SCPU_DUT/data_memory/mem_array_reg[0][1]) is unused and will be removed from module tb_simple_CPU.
+WARNING: [Synth 8-3332] Sequential element (SCPU_DUT/data_memory/mem_array_reg[0][0]) is unused and will be removed from module tb_simple_CPU.
+WARNING: [Synth 8-3332] Sequential element (SCPU_DUT/data_memory/mem_array_reg[1][7]) is unused and will be removed from module tb_simple_CPU.
+WARNING: [Synth 8-3332] Sequential element (SCPU_DUT/data_memory/mem_array_reg[1][6]) is unused and will be removed from module tb_simple_CPU.
+WARNING: [Synth 8-3332] Sequential element (SCPU_DUT/data_memory/mem_array_reg[1][5]) is unused and will be removed from module tb_simple_CPU.
+WARNING: [Synth 8-3332] Sequential element (SCPU_DUT/data_memory/mem_array_reg[1][4]) is unused and will be removed from module tb_simple_CPU.
+WARNING: [Synth 8-3332] Sequential element (SCPU_DUT/data_memory/mem_array_reg[1][3]) is unused and will be removed from module tb_simple_CPU.
+WARNING: [Synth 8-3332] Sequential element (SCPU_DUT/data_memory/mem_array_reg[1][2]) is unused and will be removed from module tb_simple_CPU.
+WARNING: [Synth 8-3332] Sequential element (SCPU_DUT/data_memory/mem_array_reg[1][1]) is unused and will be removed from module tb_simple_CPU.
+WARNING: [Synth 8-3332] Sequential element (SCPU_DUT/data_memory/mem_array_reg[1][0]) is unused and will be removed from module tb_simple_CPU.
+WARNING: [Synth 8-3332] Sequential element (SCPU_DUT/data_memory/mem_array_reg[2][7]) is unused and will be removed from module tb_simple_CPU.
+WARNING: [Synth 8-3332] Sequential element (SCPU_DUT/data_memory/mem_array_reg[2][6]) is unused and will be removed from module tb_simple_CPU.
+WARNING: [Synth 8-3332] Sequential element (SCPU_DUT/data_memory/mem_array_reg[2][5]) is unused and will be removed from module tb_simple_CPU.
+WARNING: [Synth 8-3332] Sequential element (SCPU_DUT/data_memory/mem_array_reg[2][4]) is unused and will be removed from module tb_simple_CPU.
+WARNING: [Synth 8-3332] Sequential element (SCPU_DUT/data_memory/mem_array_reg[2][3]) is unused and will be removed from module tb_simple_CPU.
+WARNING: [Synth 8-3332] Sequential element (SCPU_DUT/data_memory/mem_array_reg[2][2]) is unused and will be removed from module tb_simple_CPU.
+WARNING: [Synth 8-3332] Sequential element (SCPU_DUT/data_memory/mem_array_reg[2][1]) is unused and will be removed from module tb_simple_CPU.
+WARNING: [Synth 8-3332] Sequential element (SCPU_DUT/data_memory/mem_array_reg[2][0]) is unused and will be removed from module tb_simple_CPU.
+WARNING: [Synth 8-3332] Sequential element (SCPU_DUT/data_memory/mem_array_reg[3][7]) is unused and will be removed from module tb_simple_CPU.
+WARNING: [Synth 8-3332] Sequential element (SCPU_DUT/data_memory/mem_array_reg[3][6]) is unused and will be removed from module tb_simple_CPU.
+WARNING: [Synth 8-3332] Sequential element (SCPU_DUT/data_memory/mem_array_reg[3][5]) is unused and will be removed from module tb_simple_CPU.
+WARNING: [Synth 8-3332] Sequential element (SCPU_DUT/data_memory/mem_array_reg[3][4]) is unused and will be removed from module tb_simple_CPU.
+WARNING: [Synth 8-3332] Sequential element (SCPU_DUT/data_memory/mem_array_reg[3][3]) is unused and will be removed from module tb_simple_CPU.
+WARNING: [Synth 8-3332] Sequential element (SCPU_DUT/data_memory/mem_array_reg[3][2]) is unused and will be removed from module tb_simple_CPU.
+WARNING: [Synth 8-3332] Sequential element (SCPU_DUT/data_memory/mem_array_reg[3][1]) is unused and will be removed from module tb_simple_CPU.
+WARNING: [Synth 8-3332] Sequential element (SCPU_DUT/data_memory/mem_array_reg[3][0]) is unused and will be removed from module tb_simple_CPU.
+WARNING: [Synth 8-3332] Sequential element (SCPU_DUT/data_memory/mem_array_reg[4][7]) is unused and will be removed from module tb_simple_CPU.
+WARNING: [Synth 8-3332] Sequential element (SCPU_DUT/data_memory/mem_array_reg[4][6]) is unused and will be removed from module tb_simple_CPU.
+WARNING: [Synth 8-3332] Sequential element (SCPU_DUT/data_memory/mem_array_reg[4][5]) is unused and will be removed from module tb_simple_CPU.
+WARNING: [Synth 8-3332] Sequential element (SCPU_DUT/data_memory/mem_array_reg[4][4]) is unused and will be removed from module tb_simple_CPU.
+WARNING: [Synth 8-3332] Sequential element (SCPU_DUT/data_memory/mem_array_reg[4][3]) is unused and will be removed from module tb_simple_CPU.
+WARNING: [Synth 8-3332] Sequential element (SCPU_DUT/data_memory/mem_array_reg[4][2]) is unused and will be removed from module tb_simple_CPU.
+WARNING: [Synth 8-3332] Sequential element (SCPU_DUT/data_memory/mem_array_reg[4][1]) is unused and will be removed from module tb_simple_CPU.
+WARNING: [Synth 8-3332] Sequential element (SCPU_DUT/data_memory/mem_array_reg[4][0]) is unused and will be removed from module tb_simple_CPU.
+WARNING: [Synth 8-3332] Sequential element (SCPU_DUT/data_memory/mem_array_reg[5][7]) is unused and will be removed from module tb_simple_CPU.
+WARNING: [Synth 8-3332] Sequential element (SCPU_DUT/data_memory/mem_array_reg[5][6]) is unused and will be removed from module tb_simple_CPU.
+WARNING: [Synth 8-3332] Sequential element (SCPU_DUT/data_memory/mem_array_reg[5][5]) is unused and will be removed from module tb_simple_CPU.
+WARNING: [Synth 8-3332] Sequential element (SCPU_DUT/data_memory/mem_array_reg[5][4]) is unused and will be removed from module tb_simple_CPU.
+WARNING: [Synth 8-3332] Sequential element (SCPU_DUT/data_memory/mem_array_reg[5][3]) is unused and will be removed from module tb_simple_CPU.
+WARNING: [Synth 8-3332] Sequential element (SCPU_DUT/data_memory/mem_array_reg[5][2]) is unused and will be removed from module tb_simple_CPU.
+WARNING: [Synth 8-3332] Sequential element (SCPU_DUT/data_memory/mem_array_reg[5][1]) is unused and will be removed from module tb_simple_CPU.
+WARNING: [Synth 8-3332] Sequential element (SCPU_DUT/data_memory/mem_array_reg[5][0]) is unused and will be removed from module tb_simple_CPU.
+WARNING: [Synth 8-3332] Sequential element (SCPU_DUT/data_memory/mem_array_reg[6][7]) is unused and will be removed from module tb_simple_CPU.
+WARNING: [Synth 8-3332] Sequential element (SCPU_DUT/data_memory/mem_array_reg[6][6]) is unused and will be removed from module tb_simple_CPU.
+WARNING: [Synth 8-3332] Sequential element (SCPU_DUT/data_memory/mem_array_reg[6][5]) is unused and will be removed from module tb_simple_CPU.
+WARNING: [Synth 8-3332] Sequential element (SCPU_DUT/data_memory/mem_array_reg[6][4]) is unused and will be removed from module tb_simple_CPU.
+WARNING: [Synth 8-3332] Sequential element (SCPU_DUT/data_memory/mem_array_reg[6][3]) is unused and will be removed from module tb_simple_CPU.
+WARNING: [Synth 8-3332] Sequential element (SCPU_DUT/data_memory/mem_array_reg[6][2]) is unused and will be removed from module tb_simple_CPU.
+WARNING: [Synth 8-3332] Sequential element (SCPU_DUT/data_memory/mem_array_reg[6][1]) is unused and will be removed from module tb_simple_CPU.
+WARNING: [Synth 8-3332] Sequential element (SCPU_DUT/data_memory/mem_array_reg[6][0]) is unused and will be removed from module tb_simple_CPU.
+WARNING: [Synth 8-3332] Sequential element (SCPU_DUT/data_memory/mem_array_reg[7][7]) is unused and will be removed from module tb_simple_CPU.
+WARNING: [Synth 8-3332] Sequential element (SCPU_DUT/data_memory/mem_array_reg[7][6]) is unused and will be removed from module tb_simple_CPU.
+WARNING: [Synth 8-3332] Sequential element (SCPU_DUT/data_memory/mem_array_reg[7][5]) is unused and will be removed from module tb_simple_CPU.
+WARNING: [Synth 8-3332] Sequential element (SCPU_DUT/data_memory/mem_array_reg[7][4]) is unused and will be removed from module tb_simple_CPU.
+WARNING: [Synth 8-3332] Sequential element (SCPU_DUT/data_memory/mem_array_reg[7][3]) is unused and will be removed from module tb_simple_CPU.
+WARNING: [Synth 8-3332] Sequential element (SCPU_DUT/data_memory/mem_array_reg[7][2]) is unused and will be removed from module tb_simple_CPU.
+WARNING: [Synth 8-3332] Sequential element (SCPU_DUT/data_memory/mem_array_reg[7][1]) is unused and will be removed from module tb_simple_CPU.
+WARNING: [Synth 8-3332] Sequential element (SCPU_DUT/data_memory/mem_array_reg[7][0]) is unused and will be removed from module tb_simple_CPU.
+WARNING: [Synth 8-3332] Sequential element (SCPU_DUT/data_memory/mem_array_reg[8][7]) is unused and will be removed from module tb_simple_CPU.
+WARNING: [Synth 8-3332] Sequential element (SCPU_DUT/data_memory/mem_array_reg[8][6]) is unused and will be removed from module tb_simple_CPU.
+WARNING: [Synth 8-3332] Sequential element (SCPU_DUT/data_memory/mem_array_reg[8][5]) is unused and will be removed from module tb_simple_CPU.
+WARNING: [Synth 8-3332] Sequential element (SCPU_DUT/data_memory/mem_array_reg[8][4]) is unused and will be removed from module tb_simple_CPU.
+WARNING: [Synth 8-3332] Sequential element (SCPU_DUT/data_memory/mem_array_reg[8][3]) is unused and will be removed from module tb_simple_CPU.
+WARNING: [Synth 8-3332] Sequential element (SCPU_DUT/data_memory/mem_array_reg[8][2]) is unused and will be removed from module tb_simple_CPU.
+WARNING: [Synth 8-3332] Sequential element (SCPU_DUT/data_memory/mem_array_reg[8][1]) is unused and will be removed from module tb_simple_CPU.
+WARNING: [Synth 8-3332] Sequential element (SCPU_DUT/data_memory/mem_array_reg[8][0]) is unused and will be removed from module tb_simple_CPU.
+WARNING: [Synth 8-3332] Sequential element (SCPU_DUT/data_memory/mem_array_reg[9][7]) is unused and will be removed from module tb_simple_CPU.
+WARNING: [Synth 8-3332] Sequential element (SCPU_DUT/data_memory/mem_array_reg[9][6]) is unused and will be removed from module tb_simple_CPU.
+WARNING: [Synth 8-3332] Sequential element (SCPU_DUT/data_memory/mem_array_reg[9][5]) is unused and will be removed from module tb_simple_CPU.
+WARNING: [Synth 8-3332] Sequential element (SCPU_DUT/data_memory/mem_array_reg[9][4]) is unused and will be removed from module tb_simple_CPU.
+WARNING: [Synth 8-3332] Sequential element (SCPU_DUT/data_memory/mem_array_reg[9][3]) is unused and will be removed from module tb_simple_CPU.
+WARNING: [Synth 8-3332] Sequential element (SCPU_DUT/data_memory/mem_array_reg[9][2]) is unused and will be removed from module tb_simple_CPU.
+WARNING: [Synth 8-3332] Sequential element (SCPU_DUT/data_memory/mem_array_reg[9][1]) is unused and will be removed from module tb_simple_CPU.
+WARNING: [Synth 8-3332] Sequential element (SCPU_DUT/data_memory/mem_array_reg[9][0]) is unused and will be removed from module tb_simple_CPU.
+WARNING: [Synth 8-3332] Sequential element (SCPU_DUT/data_memory/mem_array_reg[10][7]) is unused and will be removed from module tb_simple_CPU.
+WARNING: [Synth 8-3332] Sequential element (SCPU_DUT/data_memory/mem_array_reg[10][6]) is unused and will be removed from module tb_simple_CPU.
+WARNING: [Synth 8-3332] Sequential element (SCPU_DUT/data_memory/mem_array_reg[10][5]) is unused and will be removed from module tb_simple_CPU.
+WARNING: [Synth 8-3332] Sequential element (SCPU_DUT/data_memory/mem_array_reg[10][4]) is unused and will be removed from module tb_simple_CPU.
+WARNING: [Synth 8-3332] Sequential element (SCPU_DUT/data_memory/mem_array_reg[10][3]) is unused and will be removed from module tb_simple_CPU.
+WARNING: [Synth 8-3332] Sequential element (SCPU_DUT/data_memory/mem_array_reg[10][2]) is unused and will be removed from module tb_simple_CPU.
+WARNING: [Synth 8-3332] Sequential element (SCPU_DUT/data_memory/mem_array_reg[10][1]) is unused and will be removed from module tb_simple_CPU.
+WARNING: [Synth 8-3332] Sequential element (SCPU_DUT/data_memory/mem_array_reg[10][0]) is unused and will be removed from module tb_simple_CPU.
+WARNING: [Synth 8-3332] Sequential element (SCPU_DUT/data_memory/mem_array_reg[11][7]) is unused and will be removed from module tb_simple_CPU.
+WARNING: [Synth 8-3332] Sequential element (SCPU_DUT/data_memory/mem_array_reg[11][6]) is unused and will be removed from module tb_simple_CPU.
+WARNING: [Synth 8-3332] Sequential element (SCPU_DUT/data_memory/mem_array_reg[11][5]) is unused and will be removed from module tb_simple_CPU.
+WARNING: [Synth 8-3332] Sequential element (SCPU_DUT/data_memory/mem_array_reg[11][4]) is unused and will be removed from module tb_simple_CPU.
+WARNING: [Synth 8-3332] Sequential element (SCPU_DUT/data_memory/mem_array_reg[11][3]) is unused and will be removed from module tb_simple_CPU.
+WARNING: [Synth 8-3332] Sequential element (SCPU_DUT/data_memory/mem_array_reg[11][2]) is unused and will be removed from module tb_simple_CPU.
+WARNING: [Synth 8-3332] Sequential element (SCPU_DUT/data_memory/mem_array_reg[11][1]) is unused and will be removed from module tb_simple_CPU.
+WARNING: [Synth 8-3332] Sequential element (SCPU_DUT/data_memory/mem_array_reg[11][0]) is unused and will be removed from module tb_simple_CPU.
+WARNING: [Synth 8-3332] Sequential element (SCPU_DUT/data_memory/mem_array_reg[12][7]) is unused and will be removed from module tb_simple_CPU.
+INFO: [Common 17-14] Message 'Synth 8-3332' appears 100 times and further instances of the messages will be disabled. Use the Tcl command set_msg_config to change the current settings.
+---------------------------------------------------------------------------------
+Finished Cross Boundary and Area Optimization : Time (s): cpu = 00:00:12 ; elapsed = 00:00:13 . Memory (MB): peak = 1253.797 ; gain = 0.000
+---------------------------------------------------------------------------------
+No constraint files found.
+---------------------------------------------------------------------------------
+Start Timing Optimization
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Finished Timing Optimization : Time (s): cpu = 00:00:12 ; elapsed = 00:00:13 . Memory (MB): peak = 1253.797 ; gain = 0.000
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Start Technology Mapping
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Finished Technology Mapping : Time (s): cpu = 00:00:12 ; elapsed = 00:00:13 . Memory (MB): peak = 1253.797 ; gain = 0.000
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Start IO Insertion
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Start Flattening Before IO Insertion
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Finished Flattening Before IO Insertion
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Start Final Netlist Cleanup
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Finished Final Netlist Cleanup
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Finished IO Insertion : Time (s): cpu = 00:00:17 ; elapsed = 00:00:19 . Memory (MB): peak = 1253.797 ; gain = 0.000
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Start Renaming Generated Instances
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Finished Renaming Generated Instances : Time (s): cpu = 00:00:17 ; elapsed = 00:00:19 . Memory (MB): peak = 1253.797 ; gain = 0.000
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Start Rebuilding User Hierarchy
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Finished Rebuilding User Hierarchy : Time (s): cpu = 00:00:17 ; elapsed = 00:00:19 . Memory (MB): peak = 1253.797 ; gain = 0.000
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Start Renaming Generated Ports
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Finished Renaming Generated Ports : Time (s): cpu = 00:00:17 ; elapsed = 00:00:19 . Memory (MB): peak = 1253.797 ; gain = 0.000
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Start Handling Custom Attributes
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Finished Handling Custom Attributes : Time (s): cpu = 00:00:17 ; elapsed = 00:00:19 . Memory (MB): peak = 1253.797 ; gain = 0.000
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Start Renaming Generated Nets
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Finished Renaming Generated Nets : Time (s): cpu = 00:00:17 ; elapsed = 00:00:19 . Memory (MB): peak = 1253.797 ; gain = 0.000
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Start Writing Synthesis Report
+---------------------------------------------------------------------------------
+
+Report BlackBoxes: 
++-+--------------+----------+
+| |BlackBox name |Instances |
++-+--------------+----------+
++-+--------------+----------+
+
+Report Cell Usage: 
++-+-----+------+
+| |Cell |Count |
++-+-----+------+
++-+-----+------+
+
+Report Instance Areas: 
++------+---------+-------+------+
+|      |Instance |Module |Cells |
++------+---------+-------+------+
+|1     |top      |       |     0|
++------+---------+-------+------+
+---------------------------------------------------------------------------------
+Finished Writing Synthesis Report : Time (s): cpu = 00:00:17 ; elapsed = 00:00:19 . Memory (MB): peak = 1253.797 ; gain = 0.000
+---------------------------------------------------------------------------------
+Synthesis finished with 0 errors, 0 critical warnings and 264 warnings.
+Synthesis Optimization Runtime : Time (s): cpu = 00:00:17 ; elapsed = 00:00:19 . Memory (MB): peak = 1253.797 ; gain = 0.000
+Synthesis Optimization Complete : Time (s): cpu = 00:00:17 ; elapsed = 00:00:19 . Memory (MB): peak = 1253.797 ; gain = 0.000
+INFO: [Project 1-571] Translating synthesized netlist
+Netlist sorting complete. Time (s): cpu = 00:00:00 ; elapsed = 00:00:00 . Memory (MB): peak = 1253.797 ; gain = 0.000
+INFO: [Project 1-570] Preparing netlist for logic optimization
+INFO: [Opt 31-138] Pushed 0 inverter(s) to 0 load pin(s).
+Netlist sorting complete. Time (s): cpu = 00:00:00 ; elapsed = 00:00:00 . Memory (MB): peak = 1253.797 ; gain = 0.000
+INFO: [Project 1-111] Unisim Transformation Summary:
+No Unisim elements were transformed.
+
+Synth Design complete, checksum: 35a308a0
+INFO: [Common 17-83] Releasing license: Synthesis
+26 Infos, 106 Warnings, 0 Critical Warnings and 0 Errors encountered.
+synth_design completed successfully
+synth_design: Time (s): cpu = 00:00:20 ; elapsed = 00:00:21 . Memory (MB): peak = 1253.797 ; gain = 0.000
+INFO: [Common 17-1381] The checkpoint 'D:/University/EEE3096S/eee-3096s-practical-work/Practical-6/Part-1/Practical6/Practical6.runs/synth_1/tb_simple_CPU.dcp' has been generated.
+INFO: [runtcl-4] Executing : report_utilization -file tb_simple_CPU_utilization_synth.rpt -pb tb_simple_CPU_utilization_synth.pb
+INFO: [Common 17-206] Exiting Vivado at Fri Nov  5 23:00:27 2021...

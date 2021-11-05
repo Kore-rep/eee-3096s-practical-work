@@ -10,6 +10,7 @@ module tb_reg_mem;
     reg [DATA_WIDTH-1:0] data_in;
     wire [DATA_WIDTH-1:0] data_out;
     reg wen, clk;
+    integer i;
 
     //Note passing of parameters syntax
     reg_mem #(DATA_WIDTH,ADDR_BITS) RM (addr, data_in, wen, clk, data_out);
@@ -24,7 +25,7 @@ module tb_reg_mem;
         wen = 1;
        
         //Write 10-42 to addresses 0-31 
-        for(integer i=10;i<43;i=i+1) 
+        for(i=10;i<43;i=i+1) 
         begin
             data_in = i; 
             addr = (i+2);
@@ -34,7 +35,7 @@ module tb_reg_mem;
         wen =0;
         #1;
         //Read 10-42 to addresses 0-31
-        for(integer i=10;i<43;i=i+1) 
+        for(i=10;i<43;i=i+1) 
         begin
             data_in = i; 
             addr = (i+2);

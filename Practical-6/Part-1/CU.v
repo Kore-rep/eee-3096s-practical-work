@@ -79,9 +79,16 @@ module CU (clk,rst, instr, result2, operand1, operand2, offset, opcode, sel1, se
                 end else if (instruction[19:18] == 2'b11) begin //storeR 
                    /******************************************** 
                    *
-                   * FILL IN CORRECT CODE HERE
+                   * STORER
                    *
                    ********************************************/ 
+                    operand1 <= regfile[instruction[15:14]]; // X2 - Target
+                    operand2 <= regfile[instruction[17:16]]; // X1 - Source
+                    offset <= instruction[11:4]; // Target Offset
+                    opcode <= instruction[3:0];
+                    sel1 <= 0; //pass data_out
+                    sel3 <= 1; //pass offset
+                    w_r <= 1; // Write
 
                 end
             end
@@ -110,7 +117,14 @@ module CU (clk,rst, instr, result2, operand1, operand2, offset, opcode, sel1, se
                    *
                    * FILL IN CORRECT CODE HERE
                    *
-                   ********************************************/ 
+                   ********************************************/
+                    operand1 <= regfile[instruction[15:14]]; // X2 - Target
+                    operand2 <= regfile[instruction[17:16]]; // X1 - Source
+                    offset <= instruction[11:4]; // Target Offset
+                    opcode <= instruction[3:0];
+                    sel1 <= 0; //pass data_out
+                    sel3 <= 1; //pass offset
+                    w_r <= 1; // Write 
                 end
             end
             MEM_ACCESS: begin //#3
@@ -130,7 +144,15 @@ module CU (clk,rst, instr, result2, operand1, operand2, offset, opcode, sel1, se
                    * Take note of what the next state should be according to
                    * the FSM
                    *
-                   ********************************************/ 
+                   ********************************************/
+                    state = DECODE;
+                    operand1 <= regfile[instruction[15:14]]; // X2 - Target
+                    operand2 <= regfile[instruction[17:16]]; // X1 - Source
+                    offset <= instruction[11:4]; // Target Offset
+                    opcode <= instruction[3:0];
+                    sel1 <= 0; //pass data_out
+                    sel3 <= 1; //pass offset
+                    w_r <= 1; // Write 
                 end
             end
             WRITE_BACK: begin //#4
@@ -150,7 +172,16 @@ module CU (clk,rst, instr, result2, operand1, operand2, offset, opcode, sel1, se
                    *
                    * FILL IN CORRECT CODE HERE
                    *
-                   ********************************************/ 
+                   ********************************************/
+                    
+                    operand1 <= regfile[instruction[15:14]]; // X2 - Target
+                    operand2 <= regfile[instruction[17:16]]; // X1 - Source
+                    offset <= instruction[11:4]; // Target Offset
+                    opcode <= instruction[3:0];
+                    sel1 <= 0; //pass data_out
+                    sel3 <= 1; //pass offset
+                    w_r <= 1; // Write
+                    regfile[operand1 + offset] <= result2; //X1 
                     
                 end else if (instruction[19:18] == 2'b10) begin //loadR             
                     regfile[instruction[17:16]] <= result2; //From data mem
